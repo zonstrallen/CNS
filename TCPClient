@@ -1,0 +1,20 @@
+import java.net.*;
+import java.io.
+public class TCPClient
+EL TCPClient.java ×
+public static void main(String arg[])throws Exception
+Socket sock = new Socket ("127.0.0.1" ,4000) ;
+System.out.print('Enter the file name\n");
+BufferedReader br = new BufferedReader (new InputStreamReader(System.in)) ;
+String fname = br. readLine();
+OutputStream ostream = sock.getOutputStream) ;
+Printwriter pwrite = new PrintWriter(ostream
+pwrite.println (fname) ;
+InputStream istream = sock.getInputStream ().
+BufferedReader socketRead = new BufferedReader (new InputStreamReader (istream));
+String str;
+while((str = socketRead. readLine()) |=
+System.out.printin(str);
+pwrite. close();
+socketRead. close();
+br. close ( ): sock. close
