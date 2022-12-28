@@ -1,20 +1,24 @@
-import java.net.*;
-import java.io.
+import java.io.*;
 public class TCPClient
-EL TCPClient.java ×
-public static void main(String arg[])throws Exception
-Socket sock = new Socket ("127.0.0.1" ,4000) ;
-System.out.print('Enter the file name\n");
-BufferedReader br = new BufferedReader (new InputStreamReader(System.in)) ;
-String fname = br. readLine();
-OutputStream ostream = sock.getOutputStream) ;
-Printwriter pwrite = new PrintWriter(ostream
-pwrite.println (fname) ;
-InputStream istream = sock.getInputStream ().
-BufferedReader socketRead = new BufferedReader (new InputStreamReader (istream));
+{
+public static void main( String args[]) throws Exception
+{
+Socket sock = new Socket("127.0.0.1", 4000);
+System.out.print("Enter the file name\n");
+BufferedReader br = new BufferedReader(new
+InputStreamReader(System.in));
+String fname = br.readLine();
+OutputStream stream = sock.getOutputStream );
+PrintWriter pwrite = new PrintWriter(ostream, true);
+pwrite. printin (fname);
+InputStream istream = sock.getinputStream();
+BufferedReader socketRead = new BufferedReader(new
+InputStreamReader(istream));
 String str;
-while((str = socketRead. readLine()) |=
+while((str = socketRead.readLine()) != null) // reading line-by-line
+{
 System.out.printin(str);
-pwrite. close();
-socketRead. close();
-br. close ( ): sock. close
+}
+pwrite.close(); socketRead.close(); br.close(); sock.close();
+}
+}
