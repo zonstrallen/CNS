@@ -1,0 +1,22 @@
+limport java.io. :
+import java.net.ServerSocket;
+import java.net. Socket;
+public class TPServer
+public static void main(String arqs (J)throws Exception
+ServerSocket sersock = new ServerSocket (4000) :
+System.out.println( Server is Ready For connection”);
+Socket sock = sersock.accept();
+System.out.printin( Connection successFul
+(Te name:
+InputStream istream = sock. getInputStream);
+BufferedReader br = new BufferedReader (new InputStreamReader (istream));
+String fname = br.readLine();
+BufferedReader contentRead = new BufferedReader (new FileReader (fname)) :
+OutputStream ostream = sock.getOutputStream ( )
+PrintWriter pwrite = new Printwriter(ostream
+String str;
+while((str = contentRead, readLine())l=
+pwrite printin(str);
+System. out. printin( (sock. close );
+sersock.close )g pwrite close);
+contentRead. close()
