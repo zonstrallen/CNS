@@ -1,22 +1,27 @@
-limport java.io. :
-import java.net.ServerSocket;
+import java.io.*
+import java.net. ServerSocket;
 import java.net. Socket;
-public class TPServer
-public static void main(String arqs (J)throws Exception
-ServerSocket sersock = new ServerSocket (4000) :
-System.out.println( Server is Ready For connection”);
-Socket sock = sersock.accept();
-System.out.printin( Connection successFul
-(Te name:
-InputStream istream = sock. getInputStream);
-BufferedReader br = new BufferedReader (new InputStreamReader (istream));
-String fname = br.readLine();
-BufferedReader contentRead = new BufferedReader (new FileReader (fname)) :
-OutputStream ostream = sock.getOutputStream ( )
-PrintWriter pwrite = new Printwriter(ostream
+public class TCPServer
+{
+public static void main(String args) throws Exception
+{
+ServerSocket sersock = new ServerSocket(4000);
+System.out.printIn("Server ready for connection");
+Socket sock = sersock.accepti);
+System.out.printIn("Connection successful | wating for file name");
+InputStream istream = sock, getinputStream( );
+BufferedReader br =new BufferedReader(new InputStreamReader(istream));
+String name = br.readLine( );
+BufferedReader contentRead = new BufferedReader(new FileReader(name) );
+OutputStream ostream = sock.getOutputStream( );
+PrintWriter pwrite = new PrintWriter(ostream, true);
 String str;
-while((str = contentRead, readLine())l=
-pwrite printin(str);
-System. out. printin( (sock. close );
-sersock.close )g pwrite close);
-contentRead. close()
+while((str = contentRead,readLine()) |= null)
+{
+pwrite.printin(str);
+}
+System.out,printin("File Contents sent successfully");
+sock.close(); sersock.close();
+pwrite.close(); br.close(); contentRead,close();
+}
+}
