@@ -1,0 +1,32 @@
+set ns [new Simulator]
+Sns color 0 Blue set nf [open prog1.nam w]
+Sns namtrace-all $nf set nd [open prog1.tr w]
+Sns trace-all Snd
+proc finish { } {
+global ns nf nd
+Sns flush-trace close Snf close Snd
+exec nam prog 1.nam & exit 0
+# Letter S is capital
+# specify packet color from Node no
+# open a nam trace file in write mode
+# nf nam filename
+# nd trace filename
+# clears trace file contents
+set nO [$ns node] set n1 [Sns nodel set n2 [Sns nodel
+# creates 3 nodes
+Sns duplex-link $nO Sn1 1Mb 10ms DropTail
+Sns duplex-link $n1 $n2 512Kb 10ms DropTail
+Sns queue-limit Sn1 Sn2 5
+set udp0 [new Agent/UDP]
+Sns attach-agent $nO Sudp0 set brO [new Application/Traffic/CBRI
+ScbrO set packetSize 500
+ScbrO set interval 0.005
+Scbr0 attach-agent Sudp0
+set sink [new Agent/Null]
+Sns attach-agent $n2 Ssink
+Sns connect Sudp0 Ssink
+# establishing links
+Sns at 0.2 "ScbrO start" $ns at 4.5 "ScbrO stop"
+Sns at 5.0 "finish"
+Sns run
+AWK file: (Open a
