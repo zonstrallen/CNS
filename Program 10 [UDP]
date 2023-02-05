@@ -1,3 +1,15 @@
+Open Terminal
+gedit UDPServer.java
+----New window
+gedit UDPClient.java
+In Server Window:
+javac UDPServer.java
+java UDPServer
+In Client Window:
+javac UDPClient.java
+java UDPClient
+
+
 import java.net.*;
 import java.util.Scanner;
 public class UDPServer
