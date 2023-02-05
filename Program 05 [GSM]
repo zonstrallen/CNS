@@ -1,3 +1,12 @@
+STEPS:
+gedit prog5.tcl
+---save---saave as---music---xgraph----bin
+gedit prog5.awk
+---save---saave as---music---xgraph----bin
+music---xgraph----bin-----open in terminal
+ns prog1.tcl
+awk -f prog5.awk prog5.tr
+
 TCL File:
 # General Parameters
 set opt(title) zero ;
