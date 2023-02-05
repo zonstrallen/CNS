@@ -59,3 +59,13 @@ public static void main(String arg[])
 			System.out.println("data is invlaid CRC error occurred");
 	}
 }
+
+
+
+
+enter the message bits 	1011001
+enter generator 	101
+the checksum is: 	000000011
+enter checksum code 	000000011
+enter generator 	101
+data is valid
