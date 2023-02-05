@@ -1,3 +1,4 @@
+TCL File:
 set ns [new Simulator]
 set na [open prog4.nam w]
 $ns namtrace-all-wireless $na 500 500
@@ -63,3 +64,21 @@ $ns at 0.0 "$cbr1 start"
 $ns at 0.0 "$cbr2 start"
 $ns at 10.0 "End"
 $ns run
+
+
+
+
+
+
+AWK File:
+BEGIN{Num_of_pkts=0;}
+{
+if ($1 == "r" && $3 == "_1_" && $4 == "AGT" && $7 == "tcp")
+{
+Num_of_pkts = Num_of_pkts + $8;
+}
+}
+END{
+Throughput = Num_of_pkts * 8 / $2 /1000000;
+printf("\n\n\tThroughput = %fbpms\n\n\n",Throughput);
+}
