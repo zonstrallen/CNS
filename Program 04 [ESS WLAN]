@@ -1,3 +1,11 @@
+STEPS:
+gedit prog4.tcl
+gedit prog4.awk
+OPEN TERMINAL:
+ns prog4.tcl
+awk -f prog4.awk prog4.tr
+
+
 TCL File:
 set ns [new Simulator]
 set na [open prog4.nam w]
