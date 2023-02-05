@@ -1,0 +1,919 @@
+------------PROGRAM 1:---------------
+STEPS:
+gedit prog1.tcl
+gedit prog1.awk
+OPEN TERMINAL:
+ns prog1.tcl
+awk -f prog1.awk prog1.tr
+
+
+TCL:
+set ns [new Simulator]
+$ns color 0 Blue
+set nf [open prog1.nam w]
+$ns namtrace-all $nf
+set nd [open prog1.tr w]
+$ns trace-all $nd
+proc finish { } {
+global ns nf nd
+$ns flush-trace
+close $nf
+close $nd
+exec nam prog1.nam &
+exit 0
+}
+set n0 [$ns node]
+set n1 [$ns node]
+set n2 [$ns node]
+
+$ns duplex-link $n0 $n1 1Mb 10ms DropTail
+$ns duplex-link $n1 $n2 512Kb 10ms DropTail
+$ns queue-limit $n1 $n2 5
+set udp0 [new Agent/UDP]
+$ns attach-agent $n0 $udp0
+set cbr0 [new Application/Traffic/CBR]
+$cbr0 set packetSize_ 500
+$cbr0 set interval_ 0.005
+$cbr0 attach-agent $udp0
+set sink [new Agent/Null]
+$ns attach-agent $n2 $sink
+$ns connect $udp0 $sink
+$ns at 0.2 "$cbr0 start"
+$ns at 4.5 "$cbr0 stop"
+$ns at 5.0 "finish"
+$ns run
+
+
+
+
+
+AWK:
+BEGIN {
+dcount = 0;
+rcount = 0;
+}
+{
+event = $1;
+if(event == "d")
+{
+dcount++;
+}
+if(event == "r")
+{
+rcount++;
+}}
+END { printf("no of pckts dropped=%d\n",dcount);
+printf("no of pckts recieved=%d\n",rcount);
+}
+
+------------PROGRAM 2:---------------
+STEPS:
+gedit prog1.tcl
+gedit prog1.awk
+OPEN TERMINAL:
+ns prog1.tcl
+awk -f prog1.awk prog1.tr
+
+
+TCL:
+set val(stop) 10.0 
+
+set ns [new Simulator]
+
+set tracefile [open 3.tr w]
+$ns trace-all $tracefile
+set namfile [open 3.nam w]
+$ns namtrace-all $namfile
+
+
+set n0 [$ns node]
+set n1 [$ns node]
+set n2 [$ns node]
+set n3 [$ns node]
+set n4 [$ns node]
+set n5 [$ns node]
+set n6 [$ns node]
+
+$ns duplex-link $n0 $n1 1Mb 50ms DropTail
+$ns queue-limit $n0 $n1 50
+$ns duplex-link $n0 $n3 1Mb 50ms DropTail
+$ns queue-limit $n0 $n3 50
+$ns duplex-link $n0 $n4 1Mb 50ms DropTail
+$ns queue-limit $n0 $n4 50
+$ns duplex-link $n0 $n5 1Mb 50ms DropTail
+$ns queue-limit $n0 $n5 2
+$ns duplex-link $n0 $n2 1Mb 50ms DropTail
+$ns queue-limit $n0 $n2 2
+$ns duplex-link $n0 $n6 1Mb 50ms DropTail
+$ns queue-limit $n0 $n6 1
+
+$ns duplex-link-op $n0 $n1 orient right-up
+$ns duplex-link-op $n0 $n2 orient right
+$ns duplex-link-op $n0 $n3 orient right-down
+$ns duplex-link-op $n0 $n4 orient left-down
+$ns duplex-link-op $n0 $n5 orient left
+$ns duplex-link-op $n0 $n6 orient left-up
+
+Agent/Ping instproc recv {from rtt} {
+$self instvar node_
+puts "node [$node_ id] received ping answer from $from with round-trip-time $rtt ms."
+}
+
+set p1 [new Agent/Ping]
+set p2 [new Agent/Ping]
+set p3 [new Agent/Ping]
+set p4 [new Agent/Ping]
+set p5 [new Agent/Ping]
+set p6 [new Agent/Ping]
+
+$ns attach-agent $n1 $p1
+$ns attach-agent $n2 $p2
+$ns attach-agent $n3 $p3
+$ns attach-agent $n4 $p4
+$ns attach-agent $n5 $p5
+$ns attach-agent $n6 $p6
+
+$ns connect $p1 $p4
+$ns connect $p2 $p5
+$ns connect $p3 $p6
+
+$ns at 0.2 "$p1 send"
+$ns at 0.4 "$p2 send"
+$ns at 0.6 "$p3 send"
+$ns at 1.0 "$p4 send"
+$ns at 1.2 "$p5 send"
+$ns at 1.4 "$p6 send"
+
+proc finish {} {
+global ns tracefile namfile
+$ns flush-trace
+close $tracefile
+close $namfile
+exec nam 3.nam &
+exit 0
+}
+
+$ns at $val(stop) "$ns nam-end-wireless $val(stop)"
+$ns at $val(stop) "finish"
+$ns at $val(stop) "puts \"done\" ; $ns halt"
+$ns run
+
+
+
+
+
+
+
+
+AWK:
+BEGIN {
+count=0;
+}
+{
+event=$1;
+if(event=="d") {
+count++;
+}
+}
+END {
+printf("No of packets dropped : %d\n",count);
+}
+------------PROGRAM 3:---------------
+STEPS:
+gedit prog3.tcl
+--type
+--save
+--save as
+--music----xgraph------bin
+gedit prog3.awk
+--type
+--save
+--save as
+--music----xgraph------bin
+{{{{{{{close terminal}}}}}}}}}
+--music----xgraph------bin----open in termianl
+ns prog3.tcl
+awk -f prog3.awk file1.tr>a1
+awk -f prog3.awk file2.tr>a2
+./xgraph a1 a2
+
+set ns [ new Simulator ]
+set tf [ open lab1.tr w ]
+$ns trace-all $tf
+set nf [ open lab1.nam w ]
+$ns namtrace-all $nf
+# The below code is used to create the nodes.
+set n0 [$ns node]
+set n1 [$ns node]
+set n2 [$ns node]
+set n3 [$ns node]
+#This is used to give color to the packets.
+$ns color 1 "red"
+$ns color 2 "blue"
+$n0 label "Source/udp0"
+$n1 label "Source/udp1"
+$n2 label "Router"
+$n3 label "Destination/Null"
+#Vary the below Bandwidth and see the number of packets dropped.
+$ns duplex-link $n0 $n2 10Mb 300ms DropTail
+$ns duplex-link $n1 $n2 10Mb 300ms DropTail
+$ns duplex-link $n2 $n3 1Mb 300ms DropTail
+#The below code is used to set the queue size b/w the nodes
+$ns set queue-limit $n0 $n2 10
+$ns set queue-limit $n1 $n2 10
+$ns set queue-limit $n2 $n3 5
+#The below code is used to attach an UDP agent to n0, UDP agent to n1 and null agent to
+n3.
+set udp0 [new Agent/UDP]
+$ns attach-agent $n0 $udp0
+set cbr0 [new Application/Traffic/CBR]
+$cbr0 attach-agent $udp0 set null [new Agent/Null]
+$ns attach-agent $n3 $null set udp1 [new Agent/UDP]
+$ns attach-agent $n1 $udp1
+set cbr1 [new Application/Traffic/CBR]
+$cbr1 attach-agent $udp1
+#The below code sets the udp0 packets to red and udp1 packets to blue color
+$udp0 set class_ 1
+$udp1 set class_ 2
+#The below code is used to connect the agents.
+$ns connect $udp0 $null
+$ns connect $udp1 $null
+#The below code is used to set the packet size to 500
+$cbr1 set packetSize_ 500Mb
+#The below code is used to set the interval of the packets, i.e., Data rate of the packets.
+#if the data rate is high then packets drops are high.
+$cbr1 set interval_ 0.005
+proc finish { } {
+global ns nf tf
+$ns flush-trace
+exec nam lab1.nam &
+close $tf
+close $nf
+exit 0
+}
+$ns at 0.1 "$cbr0 start"
+$ns at 0.1 "$cbr1 start"
+$ns at 10.0 "finish"
+$ns run
+
+
+
+
+AWK file:
+(Open a new editor using gedit command and write awk file
+BEGIN{
+#include<stdio.h>
+count=0;
+}
+{
+if($1=="d")
+#d stands for the packets drops.
+count++
+} END{
+printf("The Total no of Packets Dropped due to Congestion :%d\n\n", count)
+}
+------------PROGRAM 4:---------------
+STEPS:
+gedit prog4.tcl
+gedit prog4.awk
+OPEN TERMINAL:
+ns prog4.tcl
+awk -f prog4.awk prog4.tr
+
+
+TCL File:
+set ns [new Simulator]
+set na [open prog4.nam w]
+$ns namtrace-all-wireless $na 500 500
+set nt [open Lab4.tr w]
+$ns trace-all $nt
+set topo [new Topography]
+$topo load_flatgrid 500 500
+$ns node-config -adhocRouting DSDV
+$ns node-config -llType LL
+$ns node-config -macType Mac/802_11
+$ns node-config -ifqType Queue/DropTail
+$ns node-config -ifqLen 50
+$ns node-config -phyType Phy/WirelessPhy
+$ns node-config -channelType Channel/WirelessChannel
+$ns node-config -propType Propagation/TwoRayGround
+$ns node-config -antType Antenna/OmniAntenna
+$ns node-config -topoInstance $topo
+$ns node-config -agentTrace ON
+$ns node-config -routerTrace ON
+create-god 4
+set n0 [$ns node]
+set n1 [$ns node]
+set n2 [$ns node]
+set n3 [$ns node]
+$n0 set X_ 250.0
+$n0 set Y_ 250.0
+$n0 set Z_ 0.0
+$n1 set X_ 200.0
+$n1 set Y_ 250.0
+$n1 set Z_ 0.0
+$n2 set X_ 250.0
+$n2 set Y_ 250.0
+$n2 set Z_ 0.0
+$n3 set X_ 250.0
+$n3 set Y_ 250.0
+$n3 set Z_ 0.0
+$ns at 0.0 "$n0 setdest 400.0 300.0 50.0"
+$ns at 0.0 "$n1 setdest 50.0 100.0 20.0"
+$ns at 0.0 "$n2 setdest 75.0 180.0 5.0"
+$ns at 0.0 "$n3 setdest 100.0 100.0 25.0"
+set tcp1 [new Agent/TCP]
+$ns attach-agent $n0 $tcp1
+set tcp2 [new Agent/TCP]
+$ns attach-agent $n2 $tcp2
+set sink1 [new Agent/TCPSink]
+$ns attach-agent $n1 $sink1
+set sink2 [new Agent/TCPSink]
+$ns attach-agent $n3 $sink2
+set cbr1 [new Application/Traffic/CBR]
+$cbr1 attach-agent $tcp1
+set cbr2 [new Application/Traffic/CBR]
+$cbr2 attach-agent $tcp2
+$ns connect $tcp1 $sink1
+$ns connect $tcp2 $sink2
+proc End {} {
+global ns nt na
+$ns flush-trace
+close $na
+close $nt
+exec nam prog4.nam &
+}
+$ns at 0.0 "$cbr1 start"
+$ns at 0.0 "$cbr2 start"
+$ns at 10.0 "End"
+$ns run
+
+
+
+
+
+
+AWK File:
+BEGIN{Num_of_pkts=0;}
+{
+if ($1 == "r" && $3 == "_1_" && $4 == "AGT" && $7 == "tcp")
+{
+Num_of_pkts = Num_of_pkts + $8;
+}
+}
+END{
+Throughput = Num_of_pkts * 8 / $2 /1000000;
+printf("\n\n\tThroughput = %fbpms\n\n\n",Throughput);
+}
+------------PROGRAM 5:---------------
+STEPS:
+gedit prog5.tcl
+---save---saave as---music---xgraph----bin
+gedit prog5.awk
+---save---saave as---music---xgraph----bin
+music---xgraph----bin-----open in terminal
+ns prog1.tcl
+awk -f prog5.awk prog5.tr
+
+TCL File:
+# General Parameters
+set opt(title) zero ;
+set opt(stop) 100 ;# Stop time.
+set opt(ecn) 0 ;
+# Simulation parameters setup
+set val(chan) Channel/WirelessChannel ;# channel type
+set val(prop) Propagation/TwoRayGround ;# radio-propagation model
+set val(netif) Phy/WirelessPhy ;# network interface type
+set val(mac) Mac/802_11 ;# MAC type
+set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
+set val(ll) LL ;# link layer type
+set val(ant) Antenna/OmniAntenna ;# antenna model
+set val(ifqlen) 50 ;# max packet in ifq
+set val(nn) 2 ;# number of mobilenodes
+set val(rp) DSDV ;# routing protocol
+set val(x) 700 ;# X dimension of topography
+set val(y) 444 ;# Y dimension of topography
+set val(stop) 10.0 ;# time of simulation end
+# Initialization
+#Create a ns simulator
+set ns [new Simulator]
+#Setup topography object
+set topo [new Topography]
+$topo load_flatgrid $val(x) $val(y)
+create-god $val(nn)
+#Open the NS trace file
+set tracefile [open prog4.tr w]
+$ns trace-all $tracefile
+#Open the NAM trace file
+set namfile [open prog4.nam w]
+$ns namtrace-all $namfile
+$ns namtrace-all-wireless $namfile $val(x) $val(y)
+set chan [new $val(chan)];#Create wireless channel
+# Mobile node parameter setup
+$ns node-config -adhocRouting $val(rp) \
+-llType $val(ll) \
+-macType $val(mac) \
+-ifqType $val(ifq) \
+-ifqLen $val(ifqlen) \
+-antType $val(ant) \
+-propType $val(prop) \
+-phyType $val(netif) \
+-channel $chan \
+-topoInstance$topo \
+-agentTrace ON \
+-routerTrace ON \
+-macTrace ON \
+-movementTrace ON
+
+# Nodes Definition
+#Create 2 nodes
+set n0 [$ns node]
+$n0 set X_ 268
+$n0 set Y_ 339
+$n0 set Z_ 0.0
+$ns initial_node_pos $n0 20
+set n1 [$ns node]
+$n1 set X_ 428
+$n1 set Y_ 344
+$n1 set Z_ 0.0
+$ns initial_node_pos $n1 20
+# Generate movement
+$ns at .1 " $n0 setdest 600 344 100 "
+$ns at .1 " $n1 setdest 300 339 100 "
+# Agents Definition
+#Setup a TCP connection
+set tcp0 [new Agent/TCP]
+$ns attach-agent $n0 $tcp0
+set sink1 [new Agent/TCPSink]
+$ns attach-agent $n1 $sink1
+$ns connect $tcp0 $sink1
+$tcp0 set packetSize_ 1500
+# Applications Definition
+#Setup a FTP Application over TCP connection
+set ftp0 [new Application/FTP]
+$ftp0 attach-agent $tcp0
+$ns at 1.0 "$ftp0 start"
+$ns at 5.0 "$ftp0 stop"
+#Define a 'finish' procedure
+proc finish {} {
+global ns tracefile namfile
+$ns flush-trace
+close $tracefile
+close $namfile
+exec nam prog4.nam &
+exit 0
+}
+for {set i 0} {$i < $val(nn) } { incr i } {
+$ns at $val(stop) "\$n$i reset"
+}
+$ns at $val(stop) "$ns nam-end-wireless $val(stop)"
+$ns at $val(stop) "finish"
+$ns at $val(stop) "puts \"done\" ; $ns halt"
+$ns run
+
+
+
+
+
+
+
+
+AWK File:
+BEGIN{
+count=0;
+total=0;
+}
+{
+event =$1;
+if(event=="D") {
+count++;
+}
+}
+END{
+printf("No of packets dropped : %d\n",count);
+}
+------------PROGRAM 6:---------------
+
+
+0.9             .
+              . .
+             .  .
+0.15    start   .
+0.10            .
+0.05            .
+0.00            .       
+-0.5
+                0   [7]   20      40                  100
+
+
+------------PROGRAM 7:---------------
+import java.util.Scanner;
+import java.io.*;
+public class CRC
+{
+public static void main(String arg[])
+{
+	Scanner sc=new Scanner(System.in);
+	
+	System.out.print("enter the message bits");
+	String message=sc.nextLine();
+	System.out.print ("enter generator");
+	String generator=sc.nextLine();
+	int data[]=new int [message.length()+generator.length()-1];
+	int divisor[]=new int[generator.length()]; 
+	for (int i=0;i<message.length();i++)
+			data[i]=Integer.parseInt(message.charAt(i)+""); 
+	for (int i=0; i<generator.length();i++)
+		divisor[i]=Integer.parseInt(generator.charAt(i)+"");
+	for(int i=0;i<message.length();i++)
+	{
+		if (data[i]==1)
+			for (int j=0;j<divisor.length;j++)
+				data[i+j]^=divisor[j];
+	}
+	System.out.print ("the checksum is:");
+	for (int i=0;i<message.length();i++)
+		data[i]=Integer.parseInt(message.charAt (1)+"");
+	for (int i=0;i<data.length;i++)
+		System.out.print(data[i]);
+	System.out.println();
+	
+	System.out.print ("enter checksum code");
+		message=sc.nextLine(); 
+	System.out.print ("enter generator");
+	generator=sc.nextLine(); 
+		data=new int[message.length()+generator.length()-1];
+		divisor=new int[generator.length()];
+		for (int i=0;i<message.length();i++)
+			data[i]=Integer.parseInt(message.charAt (1)+"");
+		for (int i=0; i<generator.length();i++)
+			divisor[i]=Integer.parseInt(generator.charAt(i)+"");
+		
+		for (int i=0;i<message.length();i++)
+		{
+			if (data[i]==1)
+				for (int j=0;j<divisor.length;j++)
+					data[i+j]^=divisor[j];
+		}
+		boolean valid=true;
+		for(int i=0; i<data.length; i++)
+			if(data[i]==1)
+			{
+				valid = false;
+					break;
+			}
+		if(valid==true)
+			System.out.println("data is valid");
+		else
+			System.out.println("data is invlaid CRC error occurred");
+	}
+}
+
+
+
+
+enter the message bits 	1011001
+enter generator 	101
+the checksum is: 	000000011
+enter checksum code 	000000011
+enter generator 	101
+data is valid
+-------------------PROGRAM 8:---------------------
+import java.util.Scanner;
+public class BellmanFord
+{
+	int d[], a[][]; 
+	int n, start;
+	final int max = 999;
+	public void read()
+	{
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Enter the number of vertices");
+		n = scan.nextInt();
+		d = new int[n+1];
+		a = new int[n + 1][n + 1];
+		System.out.println("Enter the adjacency matrix: (Enter -- for Infinity)");
+		for (int i = 1; i <= n; i++)
+		{
+			for (int j = 1; j <= n; j++)
+			{
+				String str = scan.next();
+				if(str.equals("--"))
+					a[i][j] = max;
+				else a[i][j] = Integer.parseInt(str);
+			}
+		}
+		System.out.println("Enter the start vertex");
+		start = scan.nextInt();
+		if(start > n || start < 1)
+		{
+			System.out.println("Invalid start vertex.");
+			System.exit(0);
+		}
+		scan.close();
+	}
+	public void calculate()
+	{
+		for (int i = 1; i <= n; i++)
+			d[i] = max;
+		d[start] = 0;
+		for (int k = 1; k <= n - 1; k++)
+			for (int i = 1; i <= n; i++)
+				for (int j = 1; j <= n; j++)
+					if(a[i][j] != max)
+						if(d[j] > d[i]  + a[i][j])
+							d[j] = d[i] + a[i][j];
+	}
+	public void display()
+	{
+		for (int i = 1; i <= n; i++)
+        {
+			for (int j = 1; j <= n; j++)
+			{
+				if (a[i][j] != max && d[j] > d[i]+ a[i][j])
+				{
+					System.out.println("The Graph contains negative edge cycle");
+					return;
+				}
+			}
+		}
+		System.out.println("Distance from Source Vertex " + start + " to:");
+		for (int i = 1; i <= n; i++)
+			System.out.println("Vertex "+ i + " is " + d[i]);
+	}
+	public static void main(String args[])
+	{
+		BellmanFord obj = new BellmanFord();
+		obj.read();
+		obj.calculate();
+		obj.display();
+	}
+}
+
+
+[1]----5---->[3]
+|         /   ^
+|      7 /    |
+4      /      |-15
+|     /       |
+V   V         |
+[2]----3---->[4]
+
+0	4	5	999
+999	0	999	3
+999	7	0	999
+999	999	-15	0
+
+-------------------PROGRAM 9:---------------------
+STEPS:
+--New Folder
+--Create text file----type message
+--open in terminal
+gedit TCPServer.java
+--code
+gedit TCPClient.java
+--code
+[[[[[[[[[[In server window:]]]]]]]]]]]]]
+javac TCPServer.java
+java TCPServer
+[[[[[[[[[[In server window:]]]]]]]]]]]]]
+javac TCPClient.java
+java TCPClient
+-----enter text file name
+
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+public class TCPServer
+{
+public static void main(String args[])throws Exception
+{
+ServerSocket sersock = new ServerSocket(4000);
+System.out.println("Server ready for connection");
+Socket sock = sersock.accept();
+System.out.println("Connection successful | waiting for file name:");
+InputStream istream = sock.getInputStream();
+BufferedReader br = new BufferedReader(new InputStreamReader(istream));
+String fname = br.readLine();
+BufferedReader contentRead = new BufferedReader(new FileReader(fname));
+OutputStream ostream = sock.getOutputStream();
+PrintWriter pwrite = new PrintWriter(ostream,true);
+String str;
+while((str = contentRead.readLine())!=null)
+{
+pwrite.println(str);
+}
+System.out.println("File Contents sent successfully");
+sock.close();
+sersock.close();
+pwrite.close();
+br.close();
+contentRead.close();
+}
+}
+
+
+
+
+import java.net.*;
+import java.io.*;
+public class TCPClient
+{
+public static void main(String args[])throws Exception
+{
+Socket sock = new Socket("127.0.0.1",4000);
+System.out.print("Enter the file name:\n");
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+String fname = br.readLine();
+OutputStream ostream = sock.getOutputStream();
+PrintWriter pwrite = new PrintWriter(ostream,true);
+pwrite.println(fname);
+InputStream istream = sock.getInputStream();
+BufferedReader socketRead = new BufferedReader(new InputStreamReader(istream));
+String str;
+while((str = socketRead.readLine())!=null)
+{
+System.out.println(str);
+}
+pwrite.close();
+socketRead.close();
+br.close();
+sock.close();
+}
+}
+-------------------PROGRAM 10:---------------------
+Open Terminal
+gedit UDPServer.java
+----New window
+gedit UDPClient.java
+[[[[[[[[[[In Server Window:]]]]]]]]]]]]
+javac UDPServer.java
+java UDPServer
+[[[[[[[[[[In Client Window:]]]]]]]]]]]]
+javac UDPClient.java
+java UDPClient
+
+
+import java.net.*;
+import java.util.Scanner;
+public class UDPServer
+{
+public static void main(String[] args) throws Exception
+{
+Scanner in =new Scanner(System.in);
+DatagramSocket socket = new DatagramSocket();
+String msg = in.nextLine();
+byte code[]=msg.getBytes();
+InetAddress iAddress = InetAddress.getByName("127.0.0.1");
+DatagramPacket request = new DatagramPacket(code,code.length,iAddress,4000);
+socket.send(request);
+}
+}
+
+
+
+
+
+
+import java.net.*;
+public class UDPClient
+{
+public static void main(String args[]) throws Exception
+{
+DatagramSocket socket=new DatagramSocket(4000);
+byte data[]=new byte[1000];
+while(true)
+{
+DatagramPacket request = new DatagramPacket(data,data.length);
+socket.receive(request);
+String str=new String(request.getData());
+System.out.println(str);
+}
+}
+}
+-------------------PROGRAM 11:---------------------
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.Random;
+import java.math.BigInteger;
+import java.lang.*;
+public class RSA
+{
+    private BigInteger d,e,p,q,N,phi;
+    private int bitlength=1024;
+    private Random r;
+    public RSA()
+    {
+        r=new Random();
+        p=BigInteger.probablePrime(bitlength,r);
+        q=BigInteger.probablePrime(bitlength,r);
+        System.out.println("The random p number is"+p+"\n The random q number is"+q);
+        N=p.multiply(q);
+        phi=p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
+        e=BigInteger.probablePrime(bitlength/2,r);
+        while(phi.gcd(e).compareTo(BigInteger.ONE)>0 && e.compareTo(phi)<0);
+        e.add(BigInteger.ONE);
+        d=e.modInverse(phi);
+    }
+    public RSA(BigInteger e, BigInteger d, BigInteger N)
+    {
+        this.e=e;
+        this.d=d;
+        this.N=N;
+    }
+    public static void main(String args[]) throws IOException
+    {
+        RSA rsa=new RSA();
+        DataInputStream in=new DataInputStream(System.in);
+        String teststring;
+        System.out.println("Enter the plain text");
+        teststring=in.readLine();
+        System.out.println("Encrypting string:"+teststring);
+        System.out.println("String in Bytes:" +bytesToString(teststring.getBytes()));
+
+        byte[] encrypted=rsa.encrypt(teststring.getBytes());
+        byte[] decrypted=rsa.decrypt(encrypted);
+        System.out.println("decrypting bytes:" +bytesToString(decrypted));
+        System.out.println("decrypting string:" +new String(decrypted));
+
+    }
+
+    private static String bytesToString(byte[] encrypted)
+    {
+        String test=" ";
+        for(byte b:encrypted)
+        test=Byte.toString(b);
+        return test;
+    }
+    public byte[] encrypt(byte[] message)
+    {
+        return(new BigInteger(message)).modPow(e,N).toByteArray();
+    }
+    public byte[] decrypt(byte[] message)
+    {
+        return(new BigInteger(message)).modPow(d,N).toByteArray();
+    }
+}
+-------------------PROGRAM 12:---------------------
+import java.util.Scanner;
+import java.lang.*;
+public class LeakyBucket
+{
+public static void main(String[] args)
+    {
+        int i;
+        int a[]=new int[20];
+        int buck_rem=0,buck_cap=4,rate=3,sent,recv;
+        Scanner in = new Scanner(System.in);
+        System.out.println("enter the number of packets\n");
+        int n=in.nextInt();
+        System.out.println("enter the packets:\n");
+        for(i=1;i<=n;i++)
+        {
+            a[i]=in.nextInt();
+        }
+        System.out.println("clock\tpackets sent\taccepting\tsent\tremaining");
+        for(i=1;i<=n;i++)
+        {
+            if(a[i]!=0)
+            {
+                if(buck_rem+a[i]>buck_cap)
+                {
+                    recv=-1;
+                }
+                else
+                {
+                    recv=a[i];
+                    buck_rem=0;
+                }
+            }
+            else
+            {
+                recv=0;
+            }
+            if(buck_rem!=0)
+            {
+                if(buck_rem<rate)
+                {
+                    sent=buck_rem;
+                    buck_rem=0;
+                }
+                else{
+                    sent=rate;
+                    buck_rem=buck_rem-rate;
+                }
+            }
+            else
+                sent=0;
+            if(recv==-1)
+            {
+                System.out.println(+i+"\t\t"+a[i]+"\t dropped \t" +sent+"\t" +buck_rem);
+            }
+            else
+            {
+                System.out.println(+i+"\t\t"+a[i]+ "\t\t" +recv+ "\t"+sent+"\t"+buck_rem);
+            }
+        }
+    }
+}
