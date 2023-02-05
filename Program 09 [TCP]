@@ -1,3 +1,20 @@
+STEPS:
+--New Folder
+--Create text file----type message
+--open in terminal
+gedit TCPServer.java
+--code
+gedit TCPClient.java
+--code
+[[[[[[[[[[In server window:]]]]]]]]]]]]]
+javac TCPServer.java
+java TCPServer
+[[[[[[[[[[In server window:]]]]]]]]]]]]]
+javac TCPClient.java
+java TCPClient
+-----enter text file name
+
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
