@@ -1,3 +1,21 @@
+STEPS:
+gedit prog3.tcl
+--type
+--save
+--save as
+--music----xgraph------bin
+gedit prog3.awk
+--type
+--save
+--save as
+--music----xgraph------bin
+{{{{{{{close terminal}}}}}}}}}
+--music----xgraph------bin----open in termianl
+ns prog3.tcl
+awk -f prog3.awk file1.tr>a1
+awk -f prog3.awk file2.tr>a2
+./xgraph a1 a2
+
 set ns [ new Simulator ]
 set tf [ open lab1.tr w ]
 $ns trace-all $tf
