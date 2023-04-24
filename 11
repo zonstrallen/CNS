@@ -1,43 +1,65 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#FFFFFF" tools:context=".MainActivity">
-<TextView
-android:id="@+id/textView4"
-android:layout_width="371dp"
-android:layout_height="wrap_content" android:layout_alignParentStart="true" android:layout_alignParentLeft="true" android:layout_alignParentEnd="true" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:layout_marginStart="28dp"
-android:layout_marginLeft="28dp"
-android:layout_marginEnd="12dp"
-android:layout_marginRight="12dp"
-android:layout_marginBottom="219dp"
-android:text="Address:ASKB Campus, Anandnagar, | Bangalore - 560 024" android:textAlignment="center"
-android:textSize="24sp" />
-<TextView
-android:id="@+id/textView5"
-android:layout_width="250dp"
-android:layout_height="wrap_content" android:layout_alignParentStart="true" android:layout_alignParentLeft="true" android:layout_alignParentEnd="true" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:layout_marginStart="87dp"
-android:layout_marginLeft="87dp"
-android:layout_marginEnd="73dp"
-android:layout_marginRight="73dp"
- 
- android:layout_marginBottom="157dp" android:text="Ph No: 9108380566" android:textAlignment="center" android:textSize="24sp" />
-<TextView
-android:id="@+id/textView6" android:layout_width="367dp" android:layout_height="wrap_content" android:layout_alignParentStart="true" android:layout_alignParentLeft="true" android:layout_alignParentEnd="true" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:layout_marginStart="25dp" android:layout_marginLeft="25dp" android:layout_marginEnd="19dp" android:layout_marginRight="19dp" android:layout_marginBottom="64dp" android:text="Email Id: uzma.sulthana@atria.edu" android:textAlignment="center" android:textSize="24sp" />
-<TextView
-android:id="@+id/textView3" android:layout_width="367dp" android:layout_height="66dp" android:layout_alignParentStart="true" android:layout_alignParentLeft="true" android:layout_alignParentEnd="true" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:layout_marginStart="32dp" android:layout_marginLeft="32dp" android:layout_marginEnd="12dp" android:layout_marginRight="12dp" android:layout_marginBottom="287dp" android:text="Assistant Professor-ISE" android:textAlignment="center" android:textSize="24sp" />
-<ImageView
-android:id="@+id/imageView3" android:layout_width="155dp" android:layout_height="98dp" android:layout_alignParentEnd="true"
+<?xml version="1.0" encoding="utf-8"?> <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" tools:context=".MainActivity">
+<Button
+android:id="@+id/button" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Click Here" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" /> <TextView
+android:id="@+id/textView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="WALL PAPER" android:textColor="#7E0E0E" android:textSize="24sp"
+android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.45" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.144" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+JAVA PART
+package com.example.prog4;
+import androidx.appcompat.app.AppCompatActivity; import android.annotation.SuppressLint;
+import android.app.WallpaperManager;
 
- android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:layout_marginEnd="12dp" android:layout_marginRight="12dp" android:layout_marginBottom="495dp" app:srcCompat="@drawable/aitlogo" /> <View
-android:id="@+id/view" android:layout_width="wrap_content" android:layout_height="4dp" android:layout_alignParentBottom="true" android:layout_marginBottom="487dp" android:background="#4444" /> <TextView
-android:id="@+id/textView2" android:layout_width="176dp" android:layout_height="wrap_content" android:layout_alignParentStart="true" android:layout_alignParentLeft="true" android:layout_alignParentEnd="true" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:layout_marginStart="95dp" android:layout_marginLeft="95dp" android:layout_marginEnd="140dp" android:layout_marginRight="140dp" android:layout_marginBottom="401dp" android:text="Uzma Sulthana" android:textAlignment="center" android:textSize="24sp" android:textStyle="bold" />
-<TextView
-android:id="@+id/textView7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_marginEnd="99dp" android:layout_marginRight="99dp" android:layout_marginBottom="495dp" android:layout_toStartOf="@+id/imageView3" android:layout_toLeftOf="@+id/imageView3" android:text="AIT" android:textColor="#E91E63"
-
- android:textSize="36sp" android:textStyle="bold" />
-JAVA-CODE
-package com.example.visitingcardapplication;
-import androidx.appcompat.app.AppCompatActivity; import android.os.Bundle;
-public class MainActivity extends AppCompatActivity { @Override
-protected void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); setContentView(R.layout.activity_main);
+ import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable; import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableContainer; import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+public class MainActivity extends AppCompatActivity
+{ Button dynwall;
+Timer mytimer;
+Drawable drawable;
+WallpaperManager wpr;
+int prev=1;
+@Override
+protected void onCreate(Bundle savedInstanceState)
+{ super.onCreate(savedInstanceState); setContentView(R.layout.activity_main);
+mytimer=new Timer(); wpr=WallpaperManager.getInstance(this); dynwall=findViewById(R.id.button); dynwall.setOnClickListener(new View.OnClickListener()
+{ @Override
+public void onClick(View view)
+{ setWallpaper(); }
+});
 }
+private void setWallpaper() {
+mytimer.schedule(new TimerTask() { @SuppressLint("MissingPermission")
+@Override
+public void run() {
+if(prev==1) {
+drawable = getResources().getDrawable(R.drawable.w1); prev=2;
+}
+else if(prev==2) {
+drawable = getResources().getDrawable((R.drawable.w1)); prev=3;
+}
+
+ else if(prev==3) {
+drawable = getResources().getDrawable((R.drawable.w2)); prev = 4;
+}
+else if(prev==4) {
+drawable = getResources().getDrawable((R.drawable.w3)); prev = 1;
+}
+Bitmap
+wallpaper = ((BitmapDrawable) drawable).getBitmap();
+try {
+wpr.setBitmap(wallpaper);
+}
+catch (IOException e)
+{
+e.printStackTrace();
+}
+}
+},0,3000);
 }
